@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{cliente/fragments/layout}">
+	
+	   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyewvR+5uWqI9EmLvG1hQp0BQakKkaQ1Sm" crossorigin="anonymous">
+
+<head>
+
+<title>Finalizar Compra</title>
+
+</script>
+
+</head>
+
+<body>
+
+	<!-- Page Content -->
+	<div class="container" layout:fragment="corpo">
+		<form action="/finalizar/confirmar" method="post">
+			<div class="row">
+				<div class="col-12">
+					<h3>
+						<span th:text="${cliente.nome}"></span>
+					</h3>
+					<h3>
+						<span th:text="${cliente.email}"></span>
+					</h3>
+				</div>
+
+<div class="col-6">
+    <label for="formaPagamento">Forma de Pagamento:</label>
+    <select class="form-control" name="formaPagamento" >
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Cartão de Débito">Cartão de Débito</option>
+        <option value="Boleto">Boleto</option>
+        <option value="Pix">Pix</option>
+        <!-- Adicione mais opções conforme necessário -->
+    </select>
+    <p>Escolha a forma de pagamento que melhor se adequa a você.</p>
+</div>
+
+
+<div class="col-6">
+    <label for="tipoEntrega">Tipo de Entrega:</label>
+    <select class="form-control" name="tipoEntrega" id="tipoEntrega" onchange="atualizarFrete()">
+        <option value="Retirado na Loja">Retirado na Loja</option>
+        <option value="Entrega Padrão">Entrega Padrão</option>
+        <option value="Entrega Expressa">Entrega Expressa</option>
+        <option value="Entrega Agendada">Entrega Agendada</option>
+    </select>
+    <p>Escolha o tipo de entrega que melhor atende às suas necessidades.</p>
+</div>
+
+<script>
+ function atualizarFrete() {
+        var freteElemento = document.getElementById("frete");
+        var tipoEntrega = document.getElementById("tipoEntrega").value;
+        switch (tipoEntrega) {
+            case "Retirado na Loja":
+                freteElemento.textContent = "R$ 0.00";
+                break;
+            case "Entrega Padrão":
+                freteElemento.textContent = "R$ 2.00";
+                break;
+            case "Entrega Expressa":
+                freteElemento.textContent = "R$ 6.00";
+                break;
+            case "Entrega Agendada":
+                freteElemento.textContent = "R$ 4.00";
+                break;
+            default:
+                freteElemento.textContent = "R$ 0.00";
+        }
+        // Chamada da função para atualizar o valor total ao alterar o frete
+        atualizarValorTotal();
+    } 
+</script>
+
+
+				<div class="col-12">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">Produto</th>
+									<th scope="col">Estoque</th>
+									<th scope="col" class="text-center">Quantidade</th>
+									<th scope="col" class="text-right">Valor Unitário</th>
+									<th scope="col" class="text-right">Valor Total</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="item : ${listaItens}">
+									<td><img th:src="@{/mostrarImagem/{imagem}(imagem=${item.produto.nomeImagem})}"  width="50" height="50" />
+									</td>
+									<td th:text="${item.produto.descricao}"></td>
+									<td>Em estoque</td>
+									<td class="text-center"><span th:text="${item.quantidade}"></span></td>
+
+									<td class="text-right">R$ <span th:text="${item.valorUnitario}"></span>0</td>
+									<td class="text-right">R$ <span th:text="${item.valorTotal}"></span>0</td>
+									<td class="text-right"></td>
+								</tr>
+
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>Sub-Total</td>
+									<td class="text-right">R$<span th:text="${compra.valorTotal}"></span>0</td>
+								</tr>
+								
+						
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>Frete</td>
+									<td class="text-right" id="frete">R$ 0,00</td>
+								</tr>
+								
+
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><strong>Total</strong></td>
+									<td class="text-right">R$<span th:text="${compra.valorTotal}"></span>0</td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+				<div class="col mb-2">
+					<div class="row">
+						<div class="col-sm-12  col-md-6"></div>
+						<div class="col-sm-12 col-md-6 text-right">
+						  <button class="btn btn-lg btn-block btn-success text-uppercase" data-toggle="modal"
+                data-target="#modalPagamento">Confirmar a Compra</button>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+			<!-- /.row -->
+
+		</form>
+
+	</div>
+	<!-- /.container -->
+
+<!-- Adicione o modal para inserir os dados do cartão, gerar boleto ou pix -->
+<div class="modal fade" id="modalPagamento" tabindex="-1" role="dialog" aria-labelledby="modalPagamentoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalPagamentoLabel">Escolha a forma de pagamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Adicione seus campos de formulário para os dados do cartão, boleto ou pix aqui -->
+                <p>Formulário de Pagamento aqui...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <!-- Adicione um botão para confirmar o pagamento -->
+                <button type="button" class="btn btn-primary" onclick="realizarPagamento()">Confirmar Pagamento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function realizarPagamento() {
+        // Lógica para processar o pagamento aqui
+        // Pode ser uma chamada a uma API, redirecionamento para um serviço de pagamento, etc.
+        
+        // Fechar o modal após o pagamento
+        $('#modalPagamento').modal('hide');
+    }
+</script>
+
+<!-- Adicione a biblioteca Bootstrap JavaScript no final do seu corpo HTML -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-bBn3B5JqNj9j8EXH0gt1ctntBwYlpj5q5z67rrs8e8ezLH7Uvi7kI2XYcDmOr2Qw"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyewvR+5uWqI9EmLvG1hQp0BQakKkaQ1Sm"
+    crossorigin="anonymous"></script>
+
+  
+
+
+
+
+</body>
+
+</html>
