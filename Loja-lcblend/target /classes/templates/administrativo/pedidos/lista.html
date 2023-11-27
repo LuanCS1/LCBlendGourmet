@@ -1,0 +1,19 @@
+<!-- detalhes.html -->
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{administrativo/fragments/layout}">
+<head>
+    <title>Detalhes Pedidos</title>
+</head>
+<body>
+    <section class="layout-content" layout:fragment="corpo">
+        <!-- Conteúdo dos detalhes da compra aqui -->
+        <h2>Detalhes da Compra</h2>
+        <p>ID da Compra: <span th:text="${compra.id}"></span></p>
+        <p>Data da Compra: <span th:text="${#dates.format(compra.dataCompra, 'dd/MM/yyyy HH:mm:ss')}"></span></p>
+        <p>Cliente: <span th:text="${compra.cliente.nome}"></span></p>
+        <p>Forma de Pagamento: <span th:text="${compra.formaPagamento}"></span></p>
+        <p>Valor Total: <span th:text="${compra.valorTotal}"></span></p>
+        <!-- Adicione mais informações da compra conforme necessário -->
+    </section>
+</body>
+</html>
